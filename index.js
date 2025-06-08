@@ -1,9 +1,10 @@
-import { QwenEmbeddings } from "./qwenEmbeddings.js";
 import { DeepSeekLLM } from "./deepseekLLM.js";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { RetrievalQAChain } from "langchain/chains";
 import { Document } from "langchain/document";
 import  loadAndSplitDocs from './splitter.js'
+import { OpenAIEmbeddings } from './openai-embeddings.js';
+
 
 async function runCodeRAG() {
   // Sample code documents
@@ -11,11 +12,11 @@ async function runCodeRAG() {
     new Document({ pageContent: "function add(a, b) { return a + b; }", metadata: { id: "doc1" } }),
     new Document({ pageContent: "function subtract(a, b) { return a - b; }", metadata: { id: "doc2" } }),
   ];
-    const chunks = await loadAndSplitDocs("./");  // Step 1 & 2
+    const chunks = await loadAndSplitDocs();  // Step 1 & 2
 
 
   // Initialize embeddings & vector store
-  const embeddings = new QwenEmbeddings();
+  const embeddings = new OpenAIEmbeddings();
   const vectorStore = await MemoryVectorStore.fromTexts(chunks, [], embeddings);
 
   // Initialize chat model
